@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    body {
+      background-color: #e2e1e1;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .container {
+      width: 800px;
+      height: 100%;
+      padding: 50px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .row {
+      display: flex;
+      width: 210px;
+      height: 210px;
+      /* background: #F77555; */
+      margin: 10px;
+      padding: 10px;
+      flex-wrap: wrap;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .col {
+      display: flex;
+      width: 60px;
+      height: 60px;
+      margin: 5px;
+      font-size: 50px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .col1 {
+      border-radius: 20px 20px 0 0;
+      background: orange;
+    }
+
+    .col2 {
+      border-radius: 0 20px 20px 0;
+      background: orange;
+    }
+
+    .col3 {
+      border-radius: 0 0 20px 20px;
+      background: orange;
+    }
+
+    .col4 {
+      border-radius: 20px 0 0 20px;
+      background: orange;
+    }
+
+    .active {
+      background: #F77555;
+    }
+
+    .bg {
+      background-color: #F77555;
+    }
+  </style>
+  <title>座位控制加桌次</title>
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="row row1">
+      <div class="col"></div>
+      <div class="col col1">1</div>
+      <div class="col "></div>
+      <div class="col col4 ">4</div>
+      <div class="col"></div>
+      <div class="col col2 ">2</div>
+      <div class="col"></div>
+      <div class="col col3 ">3</div>
+      <div class="col"></div>
+    </div>
+    <div class="row row2">
+      <div class="col"></div>
+      <div class="col col1">1</div>
+      <div class="col"></div>
+      <div class="col col4">4</div>
+      <div class="col"></div>
+      <div class="col col2">2</div>
+      <div class="col"></div>
+      <div class="col col3">3</div>
+      <div class="col"></div>
+    </div>
+    <div class="row row3">
+      <div class="col"></div>
+      <div class="col col1">1</div>
+      <div class="col"></div>
+      <div class="col col4">4</div>
+      <div class="col"></div>
+      <div class="col col2">2</div>
+      <div class="col"></div>
+      <div class="col col3">3</div>
+      <div class="col"></div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script>
+
+    let row = 0;
+    let col = 4;
+    let first = true;
+
+    // jQuery 寫法
+
+    $(window).on("keyup", e => {
+      if (e.key === "ArrowRight") {
+        if (row === 3 && col === 4) {
+          return;
+        }
+        $(".active").removeClass("active");
+        $(".bg").removeClass("bg");
+
+        col++;
+        if (col > 4) {
+          col = 0;
+          row++;
+          $(`.row${row}`).addClass("bg");
+        }
+        if (row > 3) {
+          row = 1;
+        }
+          
+        $(`.row${row} .col${col}`).addClass("active");
+      } else if (e.key === "ArrowLeft") {
+        if (row === 3 && col === 5) {
+          return;
+        }
+        $(".active").removeClass("active");
+        $(".bg").removeClass("bg");
+        if (col > 1) {
+          col--;
+          if (col === 4) {
+            $(`.row${row + 1}`).removeClass("bg");
+          }
+        }
+        else {
+          col = 5;
+          $(`.row${row}`).addClass("bg");
+          row--;
+          if (row < 1) {
+            row = 3;
+          }
+        }
+        $(`.row${row} .col${col}`).addClass("active");
+        console.log(row, col);
+        
+      }
+      
+    });
+
+    // JS 寫法
+    // window.addEventListener("keyup", e => {
+    //   if (e.key === "ArrowRight") {
+    //     if (row === 3 && col === 4) {
+    //       return;
+    //     }
+    //     if (first) {
+    //       document.querySelector(`.row${row}`).classList.add("bg");
+    //       first = false;
+    //     } else {
+    //       if (document.querySelector(".bg")) {
+    //         document.querySelector(".bg").classList.remove("bg")
+    //       }
+    //       if (document.querySelector(".active")) {
+    //         document.querySelector(".active").classList.remove("active")
+    //       }
+    //       col++;
+    //       if (col === 5) {
+    //         col = 0;
+    //         row++;
+    //         document.querySelector(`.row${row}`).classList.add("bg");
+    //       } else {
+    //         document.querySelector(`.row${row} .col${col}`).classList.add("active");
+    //       }
+    //     }
+    //   } else if (e.key === "ArrowLeft") {
+    //     if (row === 1 && col === 0) {
+    //       return;
+    //     }
+    //     if (row === 1 && col === 1) {
+    //       document.querySelector(`.row${row}`).classList.add("bg");
+    //       document.querySelector(`.row${row} .col${col}`).classList.remove("active");
+    //       return;
+    //     }
+    //     if (document.querySelector(".bg")) {
+    //       document.querySelector(".bg").classList.remove("bg")
+    //     }
+    //     if (document.querySelector(".active")) {
+    //       document.querySelector(".active").classList.remove("active")
+    //     }
+    //     col--;
+    //     if(col === -1){
+    //       col = 4 ;
+    //       row--;
+    //     }
+    //     if(col === 0){
+    //       document.querySelector(`.row${row}`).classList.add("bg")
+    //     }else{
+    //       document.querySelector(`.row${row} .col${col}`).classList.add("active");
+    //     }
+    //     console.log(row,col);
+    //   }
+    // });
+  </script>
+</body>
+
+</html>
